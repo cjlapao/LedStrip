@@ -19,7 +19,7 @@ class LedStrip:
             self.redPinValue = color.red
             self.greenPinValue = color.green
             self.bluePinValue = color.blue
-         except:
+        except:
              pass
 
     def _get_name(self):
