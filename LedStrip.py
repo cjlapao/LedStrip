@@ -22,12 +22,12 @@ class LedStrip:
         print("Pin Setup "+ pin)
     
     def setupGPIO(self):
-        GPIO.setup(self.redPin, GPIO.OUT)
-        GPIO.setup(self.greenPin, GPIO.OUT)
-        GPIO.setup(self.bluePin, GPIO.OUT)
-        self.pwmR = GPIO.PWM(self.redPin, self.defMhz)
-        self.pwmG = GPIO.PWM(self.greenPin, self.defMhz)
-        self.pwmB = GPIO.PWM(self.bluePin, self.defMhz)
+        GPIO.setup(self._redPin, GPIO.OUT)
+        GPIO.setup(self._greenPin, GPIO.OUT)
+        GPIO.setup(self._bluePin, GPIO.OUT)
+        self.pwmR = GPIO.PWM(self._redPin, self.defMhz)
+        self.pwmG = GPIO.PWM(self._greenPin, self.defMhz)
+        self.pwmB = GPIO.PWM(self._bluePin, self.defMhz)
         self.pwmR.start(0)
         self.pwmG.start(0)
         self.pwmB.start(0)
