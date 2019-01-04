@@ -44,10 +44,12 @@ class LedStrip:
         self.pwmB.ChangeDutyCycle(color.blue / 255 * 100)
         print("color updated")
 
-    def s_get_name(self):
+    def _get_name(self):
+        print("gettiing name")
         return self._name
 
     def _set_name(self, value):
+        print("changing name")
         self._name = value
 
     def get_redPin(self):
