@@ -24,11 +24,8 @@ class Configuration:
                     ledStripsLen = len(self.__items["ledStrips"])
                     if (ledStripsLen > 0):
                         for ledStrip in self.__items["ledStrips"]:
-                            obj = LedStrip()
+                            obj = LedStrip(ledStrip["redPin"],ledStrip["greenPin"],ledStrip["bluePin"])
                             obj.name = ledStrip["name"]
-                            obj.redPin = ledStrip["redPin"]
-                            obj.greenPin = ledStrip["greenPin"]
-                            obj.bluePin = ledStrip["bluePin"]
                             self.__ledStrips.append(obj)
                 if "lightSensor" in self.__items:
                     self.__lightSensor.pin = self.__items["lightSensor"]
