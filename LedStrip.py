@@ -15,6 +15,12 @@ class LedStrip:
         GPIO.setmode(GPIO.BCM)
         GPIO.setwarnings(False)
         self.setupGPIO()
+        self.pwmR = GPIO.PWM(self.redPin, self.defMhz)
+        self.pwmG = GPIO.PWM(self.greenPin, self.defMhz)
+        self.pwmB = GPIO.PWM(self.bluePin, self.defMhz)
+        self.pwmR.start(0)
+        self.pwmG.start(0)
+        self.pwmB.start(0)
     
     def setupGpi(self, pin, value):
         GPIO.setup(pin, GPIO.OUT)
@@ -22,31 +28,23 @@ class LedStrip:
         print("Pin Setup "+ pin)
     
     def setupGPIO(self):
-        GPIO.setup(self._redPin, GPIO.OUT)
-        GPIO.setup(self._greenPin, GPIO.OUT)
-        GPIO.setup(self._bluePin, GPIO.OUT)
-        self.pwmR = GPIO.PWM(self._redPin, self.defMhz)
-        self.pwmG = GPIO.PWM(self._greenPin, self.defMhz)
-        self.pwmB = GPIO.PWM(self._bluePin, self.defMhz)
-        self.pwmR.start(0)
-        self.pwmG.start(0)
-        self.pwmB.start(0)
+        GPIO.setup(self.redPin, GPIO.OUT)
+        GPIO.setup(self.greenPin, GPIO.OUT)
+        GPIO.setup(self.bluePin, GPIO.OUT)
         print("GPIO setup finished")
 
     def setColor(self, name):
-        color = Color()
-        try:
-            color.fromHex(name)
-            self.redPinValue = color.red
-            self.greenPinValue = color.green
-            self.bluePinValue = color.blue
-            self.pwmR.ChangeDutyCycle(color.red / 255 * 100)
-            self.pwmG.ChangeDutyCycle(color.green / 255 * 100)
-            self.pwmB.ChangeDutyCycle(color.blue / 255 * 100)
-        except:
-             pass
+        color = Color()        
+        color.fromHex(name)
+        self.redPinValue = color.red
+        self.greenPinValue = color.green
+        self.bluePinValue = color.blue
+        self.pwmR.ChangeDutyCycle(color.red / 255 * 100)
+        self.pwmG.ChangeDutyCycle(color.green / 255 * 100)
+        self.pwmB.ChangeDutyCycle(color.blue / 255 * 100)
+        print("color updated")
 
-    def _get_name(self):
+    def s_get_name(self):
         return self._name
 
     def _set_name(self, value):
