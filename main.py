@@ -25,7 +25,7 @@ def __init__():
     print("LedStrip on: RED "+str(conf.ledStrips[0].redPinValue) + ", Green " + str(conf.ledStrips[0].greenPinValue) + ", Blue " +str(conf.ledStrips[0].bluePinValue))
 
 def gpioStartUp():
-    GPIO.cleanup()
+    #GPIO.cleanup()
     GPIO.setmode(GPIO.BCM)
     GPIO.setwarnings(False)
 

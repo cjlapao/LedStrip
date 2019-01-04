@@ -6,7 +6,7 @@ class LedStrip:
         self.defMhz = 50
         self._redPin = red
         self._greenPin = green
-        self._bluePin = -blue
+        self._bluePin = blue
 
         self._redPinValue = 0
         self._greenPinValue = 0
