@@ -37,20 +37,24 @@ class MainProg(object):
             self.setFadeIn()
         elif command.lower() == "fadeout":
             self.setFadeOut()
+        elif command.lower() == "intensity":
+            self.setFadeOut()
         elif command.lower() == "quit":
             self.close()
+        elif command.lower() == "back":
+            self.mainMenu()
         else:
             self.help()
             self.getLedStripCommand(strip)
 
     def setColor(self):
+        colorVal = ""
         while True:
             colorVal = raw_input("[LedStrip"+ str(self.strip) +"] What color would you like: ")
             if colorVal == "quit":
                 break
-                self.close()
             elif colorVal == "back":
-                self.getLedStripCommand(self.strip)
+                break
             if "#" in colorVal:
                 self.conf.ledStrips[self.strip].setColor(colorVal)
             else:
@@ -64,6 +68,12 @@ class MainProg(object):
                 "RED "+str(self.conf.ledStrips[self.strip].redPinValue) + 
                 ", Green " + str(self.conf.ledStrips[self.strip].greenPinValue) + 
                 ", Blue " + str(self.conf.ledStrips[self.strip].bluePinValue))
+        if colorVal == "quit":
+            self.close()
+        elif colorVal == "back":
+            self.getLedStripCommand(self.strip)
+        else:
+            self.getLedStripCommand(self.strip)
 
     def setFadeIn(self):
         print("[LedStrip"+ str(self.strip) +"] Fading In")
@@ -73,6 +83,17 @@ class MainProg(object):
     def setFadeOut(self):
         print("[LedStrip"+ str(self.strip) +"] Fading Out")
         self.conf.ledStrips[self.strip].fadeOut()
+        self.getLedStripCommand(self.strip)
+
+    def setIntensity(self):
+        intensity = raw_input("[LedStrip"+ str(self.strip) +"] Please select intensity[0-100]: ")
+        if not intensity:
+            self.getLedStripCommand(self.strip)
+        else:
+            if int(intensity) >-1 and int(intensity) < 101:
+                self.conf.ledStrips[self.strip].setIntensity(intensity)
+            else:
+                print("invalid number for intensity")
         self.getLedStripCommand(self.strip)
 
     def close(self):
