@@ -16,6 +16,12 @@ class Color(object):
         sRed = hex(self.red)[2:]
         sGreen = hex(self.green)[2:]
         sBlue = hex(self.blue)[2:]
+        if sRed == "0":
+            sRed = "00"
+        if sGreen == "0":
+            sGreen = "00"
+        if sBlue == "0":
+            sBlue = "00"
         return "#"+ sRed + sGreen + sBlue
     
     def __get_name(self):
@@ -54,7 +60,11 @@ class Color(object):
             value = 0
         self.__blue = value
     
+    def __getweb(self):
+        return self.toHex()
+    
     name = property(__get_name,  __set_name)
     red = property(__get_red, __set_red)
     green = property(__get_green, __set_green)
     blue = property(__get_blue, __set_blue)
+    web = property(__getweb)

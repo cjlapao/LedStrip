@@ -6,5 +6,21 @@
     {
         "name": "black",
         "value": "#000000"
+    },
+    {
+        "name": "red",
+        "value": "#ff0000"
+    },
+    {
+        "name": "green",
+        "value": "#000000"
+    },
+    {
+        "name": "blue",
+        "value": "#000000"
+    },
+    {
+        "name": "pink",
+        "value": "#ff3399"
     }
 ]

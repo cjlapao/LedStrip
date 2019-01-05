@@ -20,6 +20,7 @@ class Colors(object):
                         color.name = co["name"]
                         color.fromHex(co["value"])
                         self.__colors.append(color)
+        print("Colors loaded from file")
     
     def __get_colors(self):
         return self.__colors

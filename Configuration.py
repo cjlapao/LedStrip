@@ -13,7 +13,6 @@ class Configuration(object):
         self.__lightSensor = LightSensor()
         self.__colors = Colors()
         self.loadSettings()
-        print("Value of redPin: " + self.items["ledStrips"][0]["name"])
 
     def loadSettings(self):
         exist = os.path.isfile("settings.json")
@@ -26,11 +25,21 @@ class Configuration(object):
                         for ledStrip in self.__items["ledStrips"]:
                             led = LedStrip(ledStrip["redPin"],ledStrip["greenPin"],ledStrip["bluePin"])
                             led.name = str(ledStrip["name"])
-                            led.test = "testing"
                             self.__ledStrips.append(led)
+                    print("Ledstrip settings loaded...")
                 if "lightSensor" in self.__items:
                     self.__lightSensor.pin = self.__items["lightSensor"]
+                    print("Light sensor settings loaded")
     
+    def getColor(self, name):
+        for color in self.__colors.items:
+            if color.name.lower() == name:
+                return color.web
+        return None
+
+    def __getLedstripCount(self):
+        return len(self.__ledStrips)
+
     def _get_items(self):
         return self.__items
     
@@ -59,6 +68,8 @@ class Configuration(object):
         for ledStrip in self.__ledStrips:
             print("name: " + ledStrip.name)
     
+    ledStripsCount = property(__getLedstripCount)
+
     items = property(_get_items, _set_items)
 
     ledStrips = property(_get_LedStrips, _set_ledStrips)

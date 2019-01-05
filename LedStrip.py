@@ -66,6 +66,7 @@ class LedStrip(object):
         print("LedStrip color updated...")
 
     def setIntensity(self, intensity):
+
         self.__pwmR.ChangeDutyCycle(self.redPinValue / 255 * intensity)
         self.__pwmG.ChangeDutyCycle(self.greenPinValue / 255 * intensity)
         self.__pwmB.ChangeDutyCycle(self.bluePinValue / 255 * intensity)
@@ -79,9 +80,11 @@ class LedStrip(object):
         intensity = self.__intensity
         stepSize = self.__intensity / self.__steps
         while count < self.__steps:
+            count += 1
             intensity = intensity - stepSize
             self.setIntensity(intensity)
             time.sleep(0.1)
+
 
     def fadeIn(self):
         count = 0
@@ -89,6 +92,7 @@ class LedStrip(object):
         self.setIntensity(100)
         stepSize = self.__intensity / self.__steps
         while count < self.__steps:
+            count += 1
             intensity = intensity + stepSize
             self.setIntensity(intensity)
             time.sleep(0.1)
