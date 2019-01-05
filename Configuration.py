@@ -25,6 +25,8 @@ class Configuration(object):
                         for ledStrip in self.__items["ledStrips"]:
                             led = LedStrip(ledStrip["redPin"],ledStrip["greenPin"],ledStrip["bluePin"])
                             led.name = str(ledStrip["name"])
+                            led.setColor(ledStrip["currentColor"])
+                            led.intensity = (ledStrip["currentIntensity"])                                    
                             self.__ledStrips.append(led)
                     print("Ledstrip settings loaded...")
                 if "lightSensor" in self.__items:

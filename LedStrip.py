@@ -66,9 +66,13 @@ class LedStrip(object):
         self.redPinValue = color.red
         self.greenPinValue = color.green
         self.bluePinValue = color.blue
-        self.__pwmR.ChangeDutyCycle(color.red / 255 * intensity)
-        self.__pwmG.ChangeDutyCycle(color.green / 255 * intensity)
-        self.__pwmB.ChangeDutyCycle(color.blue / 255 * intensity)
+        redPwm = self.redPin % float(255)
+        greenPwm = self.greenPin / float(255)
+        bluePwm = self.bluePin / float(255)
+        print("r:" + str(redPwm) + ", g:"+ str(greenPwm) + ", b:"+ str(bluePwm))
+        self.__pwmR.ChangeDutyCycle(redPwm * intensity)
+        self.__pwmG.ChangeDutyCycle(greenPwm * intensity)
+        self.__pwmB.ChangeDutyCycle(bluePwm * intensity)
         print("LedStrip color updated...")
 
     def setIntensity(self, intensity):
@@ -84,14 +88,11 @@ class LedStrip(object):
         count = 0
         intensity = self.__intensity
         stepSize = self.__intensity / self.__steps
-        print(str(self.__steps))
-        print(str(self.__duration))
-        print(str(self.__steps / self.__duration / 100))
         while count < self.__steps:
             count += 1
             intensity = intensity - stepSize
             self.setIntensity(intensity)
-            time.sleep(self.__steps / self.__duration / 100)
+            time.sleep(self.__steps / self.__duration / float(100))
 
     def fadeIn(self):
         count = 0
@@ -102,7 +103,7 @@ class LedStrip(object):
             count += 1
             intensity = intensity + stepSize
             self.setIntensity(intensity)
-            time.sleep(self.__steps / self.__duration / 100)
+            time.sleep(self.__steps / self.__duration / float(100))
 
     def __getname(self):
         return self.__name
@@ -151,6 +152,24 @@ class LedStrip(object):
     
     def _set_bluePinValue(self, value):
         self.__bluePinValue = value
+    
+    def __getIntensity(self):
+        return self.__intensity
+
+    def __setIntensity(self, value):
+        self.__intensity = value
+    
+    def __getDuration(self):
+        return self.__duration
+    
+    def __setDuration(self, value):
+        self.__duration = value
+
+    def __getSteps(self):
+        return self.__steps
+    
+    def __setSteps(self, value):
+        self.__steps = value
 
     name = property(__getname, __setname)
 
@@ -165,3 +184,9 @@ class LedStrip(object):
     bluePin = property(_get_bluePin, _set_bluePin)
 
     bluePinValue = property(_get_bluePinValue, _set_bluePinValue)
+
+    duration = property(__getDuration, __setDuration)
+
+    intensity = property(__getIntensity, __setIntensity)
+
+    steps = property(__getSteps, __setSteps)

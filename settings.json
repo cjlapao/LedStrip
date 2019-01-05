@@ -1,19 +1,31 @@
 {
+    "default" : {
+        "defaultMhz": 100,
+        "defaultSteps": 50,
+        "defaultDuration": 2
+    },
     "ledStrips" : [
         {
             "name": "ledStrip1",
             "redPin": 16,
             "greenPin": 20,
-            "bluePin": 21
+            "bluePin": 21,
+            "currentColor": "#000000",
+            "currentIntensity": 100
         },
         {
             "name": "ledStrip2",
             "redPin": 13,
             "greenPin": 19,
-            "bluePin": 26
+            "bluePin": 26,
+            "currentColor": "#000000",
+            "currentIntensity": 100
         }
     ],
     "lightSensor":{
         "pin": 12
+    },
+    "motionSensor":{
+        "pin": 4
     }
 }
