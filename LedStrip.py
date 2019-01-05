@@ -49,12 +49,14 @@ class LedStrip(object):
         print("GPIO PWM started")
     
     def __stopPWM(self):
+        GPIO.cleanup()
         self.__pwmR.stop()
         self.__pwmG.stop()
         self.__pwmB.stop()
         print("GPIO PWM stopped...")
 
     def setColor(self, name, intensity = 100):
+        self.__stopPWM()
         color = Color()        
         color.fromHex(name)
         self.redPinValue = color.red
