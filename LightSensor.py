@@ -1,4 +1,4 @@
-class LightSensor:
+class LightSensor(object):
     
     def __init__(self, *args, **kwargs):
         self.__pin = -1

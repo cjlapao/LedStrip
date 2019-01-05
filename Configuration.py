@@ -5,7 +5,7 @@ from LedStrip import LedStrip
 from LightSensor import LightSensor
 from Colors import Colors
 
-class Configuration:
+class Configuration(object):
 
     def __init__(self, *args, **kwargs):
         self.__items = object
@@ -24,9 +24,10 @@ class Configuration:
                     ledStripsLen = len(self.__items["ledStrips"])
                     if (ledStripsLen > 0):
                         for ledStrip in self.__items["ledStrips"]:
-                            obj = LedStrip(ledStrip["redPin"],ledStrip["greenPin"],ledStrip["bluePin"])
-                            obj.name = ledStrip["name"]
-                            self.__ledStrips.append(obj)
+                            led = LedStrip(ledStrip["redPin"],ledStrip["greenPin"],ledStrip["bluePin"])
+                            led.name = str(ledStrip["name"])
+                            led.test = "testing"
+                            self.__ledStrips.append(led)
                 if "lightSensor" in self.__items:
                     self.__lightSensor.pin = self.__items["lightSensor"]
     

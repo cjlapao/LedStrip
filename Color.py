@@ -1,4 +1,4 @@
-class Color:
+class Color(object):
     def __init__(self, *args, **kwargs):
         self.__red = 0
         self.__green = 0

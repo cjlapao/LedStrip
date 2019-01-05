@@ -18,16 +18,19 @@ def __init__():
     if len(conf.colors.items) > 0:
         for color in conf.colors.items:
             print("Color: " + color.name + ", value: " + color.toHex())
-    
-    colorVal = raw_input("Type in the color:")
-    conf.ledStrips[0].setColor(colorVal)
+    try:
+        while True:
+            colorVal = raw_input("Type in the color:")
+            conf.ledStrips[0].setColor(colorVal)
+            print("LedStrip on: RED "+str(conf.ledStrips[0].redPinValue) + ", Green " + str(conf.ledStrips[0].greenPinValue) + ", Blue " +str(conf.ledStrips[0].bluePinValue))
+    except KeyboardInterrupt:
+        conf.ledStrips[0].stop()
 
-    print("LedStrip on: RED "+str(conf.ledStrips[0].redPinValue) + ", Green " + str(conf.ledStrips[0].greenPinValue) + ", Blue " +str(conf.ledStrips[0].bluePinValue))
 
 def gpioStartUp():
     #GPIO.cleanup()
     GPIO.setmode(GPIO.BCM)
     GPIO.setwarnings(False)
 
-__init__()
-
+if __name__ == "__main__":
+    __init__()

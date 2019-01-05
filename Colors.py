@@ -3,7 +3,7 @@ import io
 import json
 from Color import Color
 
-class Colors:
+class Colors(object):
     def __init__(self, *args, **kwargs):
         self.__colors = []
         self.loadSettings()
