@@ -2,18 +2,18 @@
     "ledStrips" : [
         {
             "name": "ledStrip1",
-            "redPin": 27,
-            "greenPin": 17,
-            "bluePin": 22
+            "redPin": 16,
+            "greenPin": 20,
+            "bluePin": 21
         },
         {
             "name": "ledStrip2",
-            "redPin": 23,
-            "greenPin": 18,
-            "bluePin": 24
+            "redPin": 13,
+            "greenPin": 19,
+            "bluePin": 26
         }
     ],
     "lightSensor":{
-        "pin": 8
+        "pin": 12
     }
 }
