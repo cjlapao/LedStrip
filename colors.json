@@ -22,5 +22,9 @@
     {
         "name": "pink",
         "value": "#ff3399"
+    },
+    {
+        "name":"golden",
+        "value": "#DAA520"
     }
 ]

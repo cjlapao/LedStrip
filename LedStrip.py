@@ -55,8 +55,12 @@ class LedStrip(object):
         self.__pwmB.stop()
         print("GPIO PWM stopped...")
 
-    def setColor(self, name, intensity = 100):
+    def __restartPWM(self):
         self.__stopPWM()
+        self.__startPWM()
+
+    def setColor(self, name, intensity = 100):
+        self.__restartPWM()
         color = Color()        
         color.fromHex(name)
         self.redPinValue = color.red
@@ -68,7 +72,6 @@ class LedStrip(object):
         print("LedStrip color updated...")
 
     def setIntensity(self, intensity):
-
         self.__pwmR.ChangeDutyCycle(self.redPinValue / 255 * intensity)
         self.__pwmG.ChangeDutyCycle(self.greenPinValue / 255 * intensity)
         self.__pwmB.ChangeDutyCycle(self.bluePinValue / 255 * intensity)
@@ -81,12 +84,14 @@ class LedStrip(object):
         count = 0
         intensity = self.__intensity
         stepSize = self.__intensity / self.__steps
+        print(str(self.__steps))
+        print(str(self.__duration))
+        print(str(self.__steps / self.__duration / 100))
         while count < self.__steps:
             count += 1
             intensity = intensity - stepSize
             self.setIntensity(intensity)
             time.sleep(self.__steps / self.__duration / 100)
-
 
     def fadeIn(self):
         count = 0
