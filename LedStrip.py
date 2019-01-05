@@ -83,7 +83,7 @@ class LedStrip(object):
             count += 1
             intensity = intensity - stepSize
             self.setIntensity(intensity)
-            time.sleep(0.1)
+            time.sleep(self.__steps / self.__duration / 100)
 
 
     def fadeIn(self):
@@ -95,7 +95,7 @@ class LedStrip(object):
             count += 1
             intensity = intensity + stepSize
             self.setIntensity(intensity)
-            time.sleep(0.1)
+            time.sleep(self.__steps / self.__duration / 100)
 
     def __getname(self):
         return self.__name

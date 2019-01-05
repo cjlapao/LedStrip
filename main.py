@@ -38,7 +38,7 @@ class MainProg(object):
         elif command.lower() == "fadeout":
             self.setFadeOut()
         elif command.lower() == "intensity":
-            self.setFadeOut()
+            self.setIntensity()
         elif command.lower() == "quit":
             self.close()
         elif command.lower() == "back":
