@@ -66,9 +66,9 @@ class LedStrip(object):
         self.redPinValue = color.red
         self.greenPinValue = color.green
         self.bluePinValue = color.blue
-        redPwm = self.redPinValue / float(255) * 100
-        greenPwm = self.greenPinValue / float(255) * 100
-        bluePwm = self.bluePinValue / float(255) * 100
+        redPwm = self.redPinValue / float(255)
+        greenPwm = self.greenPinValue / float(255)
+        bluePwm = self.bluePinValue / float(255)
         print("r:" + str(redPwm) + ", g:"+ str(greenPwm) + ", b:"+ str(bluePwm))
         self.__pwmR.ChangeDutyCycle(redPwm * intensity)
         self.__pwmG.ChangeDutyCycle(greenPwm * intensity)
