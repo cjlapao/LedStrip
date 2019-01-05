@@ -5,7 +5,7 @@ from Color import Color
 class LedStrip(object):
     
     def __init__(self, red, green, blue):
-        self.__defaultMhz = 50
+        self.__defaultMhz = 100
         self.__redPin = red
         self.__greenPin = green
         self.__bluePin = blue
@@ -92,7 +92,7 @@ class LedStrip(object):
             count += 1
             intensity = intensity - stepSize
             self.setIntensity(intensity)
-            time.sleep(self.__steps / self.__duration / float(100))
+            time.sleep(self.__steps / self.__duration / float(1000))
 
     def fadeIn(self):
         count = 0
@@ -103,7 +103,7 @@ class LedStrip(object):
             count += 1
             intensity = intensity + stepSize
             self.setIntensity(intensity)
-            time.sleep(self.__steps / self.__duration / float(100))
+            time.sleep(self.__steps / self.__duration / float(1000))
 
     def __getname(self):
         return self.__name
