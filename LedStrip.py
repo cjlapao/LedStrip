@@ -49,7 +49,7 @@ class LedStrip(object):
         print("GPIO PWM started")
     
     def __stopPWM(self):
-        GPIO.cleanup()
+        #GPIO.cleanup()
         self.__pwmR.stop()
         self.__pwmG.stop()
         self.__pwmB.stop()
