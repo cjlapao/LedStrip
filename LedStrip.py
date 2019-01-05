@@ -69,16 +69,18 @@ class LedStrip(object):
         redPwm = self.redPinValue / float(255)
         greenPwm = self.greenPinValue / float(255)
         bluePwm = self.bluePinValue / float(255)
-        print("r:" + str(redPwm) + ", g:"+ str(greenPwm) + ", b:"+ str(bluePwm))
         self.__pwmR.ChangeDutyCycle(redPwm * intensity)
         self.__pwmG.ChangeDutyCycle(greenPwm * intensity)
         self.__pwmB.ChangeDutyCycle(bluePwm * intensity)
         print("LedStrip color updated...")
 
     def setIntensity(self, intensity):
-        self.__pwmR.ChangeDutyCycle(self.redPinValue / 255 * intensity)
-        self.__pwmG.ChangeDutyCycle(self.greenPinValue / 255 * intensity)
-        self.__pwmB.ChangeDutyCycle(self.bluePinValue / 255 * intensity)
+        redPwm = self.redPinValue / float(255)
+        greenPwm = self.greenPinValue / float(255)
+        bluePwm = self.bluePinValue / float(255)
+        self.__pwmR.ChangeDutyCycle(redPwm * intensity)
+        self.__pwmG.ChangeDutyCycle(greenPwm * intensity)
+        self.__pwmB.ChangeDutyCycle(bluePwm * intensity)
         print("LedStrip color intensity updated...")
 
     def close(self):
