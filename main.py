@@ -47,6 +47,7 @@ class MainProg(object):
         while True:
             colorVal = raw_input("[LedStrip"+ str(self.strip) +"] What color would you like: ")
             if colorVal == "quit":
+                break
                 self.close()
             elif colorVal == "back":
                 self.getLedStripCommand(self.strip)

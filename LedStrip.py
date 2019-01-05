@@ -5,7 +5,7 @@ from Color import Color
 class LedStrip(object):
     
     def __init__(self, red, green, blue):
-        self.__defaultMhz = 200
+        self.__defaultMhz = 50
         self.__redPin = red
         self.__greenPin = green
         self.__bluePin = blue
