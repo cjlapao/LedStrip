@@ -13,14 +13,14 @@ class LightSensor(object):
     def setupGPIO(self):
         GPIO.setmode(GPIO.BCM)
         GPIO.setwarnings(False)
+
+    def getLightIntensity(self):
         GPIO.setup(self.pin, GPIO.OUT)
         GPIO.output(self.pin, GPIO.LOW)
         time.sleep(0.1)
         GPIO.setup(self.pin, GPIO.IN)
-
-    def getLightIntensity(self):
         count = 0        
-        while(GPIO.input(self.pin) == GPIO.LOW):
+        while (GPIO.input(self.pin) == GPIO.LOW):
             count += 1
         return count
 
