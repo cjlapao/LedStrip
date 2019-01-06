@@ -39,7 +39,7 @@ class MainProg(object):
             self.setFadeOut()
         elif command.lower() == "intensity":
             self.setIntensity()
-        elif command.lower() == "lightSensor":
+        elif command.lower() == "lightsensor":
             self.getLightSensorValue()
         elif command.lower() == "quit":
             self.close()
