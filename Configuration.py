@@ -30,7 +30,7 @@ class Configuration(object):
                             self.__ledStrips.append(led)
                     print("Ledstrip settings loaded...")
                 if "lightSensor" in self.__items:
-                    self.__lightSensor = LightSensor( self.__items["lightSensor"])
+                    self.__lightSensor = LightSensor(int(self.__items["lightSensor"]["pin"]))
                     print("Light sensor settings loaded")
     
     def getColor(self, name):

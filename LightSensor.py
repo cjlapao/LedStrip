@@ -4,7 +4,10 @@ import RPi.GPIO as GPIO
 class LightSensor(object):
     
     def __init__(self, sensorPin):
-        self.__pin = sensorPin
+        try:
+            self.__pin = int(sensorPin)
+        except:
+            self.__pin = 4
         self.setupGPIO()
     
     def setupGPIO(self):
@@ -34,7 +37,7 @@ class LightSensor(object):
             return True
         else: 
             return False
-            
+
     def __get_pin(self):
         return self.__pin
     
