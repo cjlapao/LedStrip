@@ -23,9 +23,9 @@
         }
     ],
     "lightSensor":{
-        "pin": 12
+        "pin": 4
     },
     "motionSensor":{
-        "pin": 4
+        "pin": 12
     }
 }

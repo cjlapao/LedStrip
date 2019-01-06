@@ -10,7 +10,7 @@ class Configuration(object):
     def __init__(self, *args, **kwargs):
         self.__items = object
         self.__ledStrips = []
-        self.__lightSensor = LightSensor()
+        self.__lightSensor = LightSensor
         self.__colors = Colors()
         self.loadSettings()
 
@@ -30,7 +30,7 @@ class Configuration(object):
                             self.__ledStrips.append(led)
                     print("Ledstrip settings loaded...")
                 if "lightSensor" in self.__items:
-                    self.__lightSensor.pin = self.__items["lightSensor"]
+                    self.__lightSensor = LightSensor( self.__items["lightSensor"])
                     print("Light sensor settings loaded")
     
     def getColor(self, name):

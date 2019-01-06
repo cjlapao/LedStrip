@@ -39,6 +39,8 @@ class MainProg(object):
             self.setFadeOut()
         elif command.lower() == "intensity":
             self.setIntensity()
+        elif command.lower() == "lightSensor":
+            self.getLightSensorValue()
         elif command.lower() == "quit":
             self.close()
         elif command.lower() == "back":
@@ -84,6 +86,10 @@ class MainProg(object):
         print("[LedStrip"+ str(self.strip) +"] Fading Out")
         self.conf.ledStrips[self.strip].fadeOut()
         self.getLedStripCommand(self.strip)
+    
+    def getLightSensorValue(self):
+        intensity = self.conf.lightSensor.getIntensity()
+        print("The sensor is: " + str(intensity))
 
     def setIntensity(self):
         intensity = raw_input("[LedStrip"+ str(self.strip) +"] Please select intensity[0-100]: ")
