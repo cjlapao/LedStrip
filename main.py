@@ -88,7 +88,7 @@ class MainProg(object):
         self.getLedStripCommand(self.strip)
     
     def getLightSensorValue(self):
-        intensity = self.conf.lightSensor.getIntensity()
+        intensity = self.conf.lightSensor.getLightIntensity()
         print("The sensor is: " + str(intensity))
 
     def setIntensity(self):
