@@ -4,6 +4,7 @@ import time
 class MotionSensor(object):    
     def __init__(self, pin):
         self.pin = pin
+        print("pin "+ str(self.pin))
         self.movementThreshold = 5
         self.readingDelay = 500
         self.setupGPIO()
@@ -19,7 +20,7 @@ class MotionSensor(object):
         movementDetected = False
         while count < self.readingDelay:
             count += 1
-            if GPIO.input(self.pin) == GPIO.HIGH:
+            if GPIO.input(self.pin) == 1:
                 movementCount += 1
                 if movementCount > self.movementThreshold:
                     movementDetected = True
