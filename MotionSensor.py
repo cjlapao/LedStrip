@@ -19,7 +19,7 @@ class MotionSensor(object):
         movementDetected = False
         while count < self.readingDelay:
             count += 1
-            if GPIO.input(self.pin):
+            if GPIO.input(self.pin) == GPIO.HIGH:
                 movementCount += 1
                 if movementCount > self.movementThreshold:
                     movementDetected = True
