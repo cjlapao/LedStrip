@@ -70,7 +70,7 @@ class LedStrip(object):
         self.redPinValue = self.color.red
         self.greenPinValue = self.color.green
         self.bluePinValue = self.color.blue
-        if self.redPin == 0 and self.greenPin == 0 and self.bluePin == 0:
+        if self.color.red == 0 and self.color.green == 0 and self.color.blue == 0:
             self.isOn = False
             self.close()
         else:
@@ -188,10 +188,10 @@ class LedStrip(object):
         self.__isOn = value
 
     def __getColor(self):
-        self.__color.red = self.redPinValue
-        self.__color.green = self.greenPinValue
-        self.__color.blue = self.bluePinValue
         return self.__color
+
+    def __setColor(self, value):
+        self.__color = value
 
     name = property(__getname, __setname)
 
@@ -215,4 +215,4 @@ class LedStrip(object):
 
     isOn = property(__getIsOn, __setIsOn)
 
-    color = property(__getColor)
+    color = property(__getColor, __setColor)
