@@ -20,12 +20,15 @@ class MotionSensor(object):
         movementDetected = False
         while count < self.readingDelay:
             count += 1
+            print("count "+ str(count))
             if GPIO.input(self.pin) == 1:
                 movementCount += 1
                 if movementCount > self.movementThreshold:
                     movementDetected = True
                     print("Movement Detected")
                     break
+            time.sleep(0.05)
+        return movementDetected
 
     def __getPin(self):
         return self.__pin
