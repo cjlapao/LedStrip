@@ -108,6 +108,7 @@ class LedStrip(object):
                 self.setColor(newColor)
                 time.sleep(self.__steps / self.__duration / float(1000))
                 print("fading to " + str(intensity * count) + ", color now "+ newColor)
+                time.sleep(1)
             self.isOn = False
 
     def fadeIn(self):

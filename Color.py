@@ -70,9 +70,11 @@ class Color(object):
         return self.toHex()
     
     def darken(self, percentage = 10):
+        print("previous color "+self.toHex())
         self.red = self.red - (self.red * (percentage / 100))
         self.green = self.green - (self.green * (percentage / 100))
         self.blue = self.blue - (self.blue * (percentage / 100))
+        print("new color "+self.toHex())
         return self.toHex()
 
     name = property(__get_name,  __set_name)
