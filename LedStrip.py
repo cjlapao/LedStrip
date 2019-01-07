@@ -96,24 +96,28 @@ class LedStrip(object):
         self.__stopPWM()
     
     def fadeOut(self):
-        count = 0
-        color = self.color
-        while count < self.__steps:
-            count += 1
-            intensity = (100 / self.__steps) * count
-            color.darken(intensity)
-            time.sleep(self.__steps / self.__duration / float(1000))
-        self.isOn = False
+        if self.isOn:
+            count = 0
+            color = self.color
+            intensity = (100 / self.__steps)
+            while count < self.__steps:
+                count += 1            
+                color.darken(intensity * count)
+                time.sleep(self.__steps / self.__duration / float(1000))
+                print("fading to " + str(intensity) + ", color now "+ self.color.toHex())
+            self.isOn = False
 
     def fadeIn(self):
-        count = 0
-        color = self.color
-        while count < self.__steps:
-            count += 1
-            intensity = (100 / self.__steps) * count
-            color.lighten(intensity)
-            time.sleep(self.__steps / self.__duration / float(1000))
-        self.isOn = True
+        if not self.isOn:
+            count = 0
+            color = self.color
+            intensity = (100 / self.__steps)
+            while count < self.__steps:
+                count += 1            
+                color.darken(100 - (intensity * count))
+                time.sleep(self.__steps / self.__duration / float(1000))
+                print("fading from " + str(intensity) + ", color now "+ self.color.toHex())
+            self.isOn = True
 
     def __getname(self):
         return self.__name
