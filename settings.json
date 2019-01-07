@@ -26,6 +26,8 @@
         "pin": 4
     },
     "motionSensor":{
-        "pin": 12
+        "pin": 17,
+        "readingDelay": 500,
+        "movementThreshold": 5
     }
 }

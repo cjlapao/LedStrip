@@ -20,11 +20,32 @@
         "value": "#0000ff"
     },
     {
-        "name": "pink",
-        "value": "#ff3399"
+        "name": "lightblue",
+        "value": "#1485CC"
+    },
+    {
+        "name": "yellow",
+        "value": "#ffff00"
+    },
+    {
+        "name": "violet",
+        "value": "#ff00ff"
     },
     {
         "name":"golden",
         "value": "#DAA520"
+    },
+    {
+        "name":"darkorange",
+        "value": "#FF8C00"
+    },
+    {
+        "name":"darkviolet",
+        "value": "#9400d3"
+    },
+    {
+        "name":"gold",
+        "value": "#ffd705"
     }
+
 ]

@@ -3,6 +3,7 @@ import io
 import os
 from LedStrip import LedStrip
 from LightSensor import LightSensor
+from MotionSensor import MotionSensor
 from Colors import Colors
 
 class Configuration(object):
@@ -11,6 +12,7 @@ class Configuration(object):
         self.__items = object
         self.__ledStrips = []
         self.__lightSensor = LightSensor
+        self.__motionSensor = MotionSensor
         self.__colors = Colors()
         self.loadSettings()
 
@@ -32,6 +34,11 @@ class Configuration(object):
                 if "lightSensor" in self.__items:
                     self.__lightSensor = LightSensor(int(self.__items["lightSensor"]["pin"]))
                     print("Light sensor settings loaded")
+                if "motionSensor" in self.__items:
+                    self.__motionSensor = MotionSensor(int(self.__items["motionSensor"]["pin"]))
+                    self.__motionSensor.movementThreshold = int(self.__items["motionSensor"]["movementThreshold"])
+                    self.__motionSensor.readingDelay = int(self.__items["motionSensor"]["readingDelay"])
+                    print("motion sensor settings loaded")
     
     def getColor(self, name):
         for color in self.__colors.items:
@@ -66,6 +73,9 @@ class Configuration(object):
     def __set_colors(self, value):
         self.__colors = value
 
+    def  __getMotionSensor(self):
+        return self.__motionSensor
+
     def printLedStrips(self):
         for ledStrip in self.__ledStrips:
             print("name: " + ledStrip.name)
@@ -79,3 +89,5 @@ class Configuration(object):
     lightSensor = property(_get_lightSensor, _set_lightSensor)
 
     colors = property(__get_colors, __set_colors)
+
+    motionSensor = property(__getMotionSensor)

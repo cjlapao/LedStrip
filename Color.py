@@ -62,7 +62,17 @@ class Color(object):
     
     def __getweb(self):
         return self.toHex()
+
+    def lighten(self, percentage = 10):
+        self.red = self.red + (self.red * (percentage / 100))
+        self.green = self.green + (self.green * (percentage / 100))
+        self.blue = self.blue + (self.blue * (percentage / 100))
     
+    def darken(self, percentage = 10):
+        self.red = self.red + (self.red * (percentage / 100))
+        self.green = self.green + (self.green * (percentage / 100))
+        self.blue = self.blue + (self.blue * (percentage / 100))
+
     name = property(__get_name,  __set_name)
     red = property(__get_red, __set_red)
     green = property(__get_green, __set_green)

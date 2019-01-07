@@ -5,6 +5,8 @@ from Color import Color
 class LedStrip(object):
     
     def __init__(self, red, green, blue):
+        self.isOn = False
+        self.__color = Color()
         self.__defaultMhz = 100
         self.__redPin = red
         self.__greenPin = green
@@ -54,6 +56,9 @@ class LedStrip(object):
         self.__pwmG.stop()
         self.__pwmB.stop()
         print("GPIO PWM stopped...")
+    
+    def off(self):
+        self.setColor("#000000")      
 
     def __restartPWM(self):
         self.__stopPWM()
@@ -61,18 +66,22 @@ class LedStrip(object):
 
     def setColor(self, name, intensity = 100):
         self.__restartPWM()
-        color = Color()        
-        color.fromHex(name)
-        self.redPinValue = color.red
-        self.greenPinValue = color.green
-        self.bluePinValue = color.blue
-        redPwm = self.redPinValue / float(255)
-        greenPwm = self.greenPinValue / float(255)
-        bluePwm = self.bluePinValue / float(255)
-        self.__pwmR.ChangeDutyCycle(redPwm * intensity)
-        self.__pwmG.ChangeDutyCycle(greenPwm * intensity)
-        self.__pwmB.ChangeDutyCycle(bluePwm * intensity)
-        print("LedStrip color updated...")
+        self.color.fromHex(name)
+        self.redPinValue = self.color.red
+        self.greenPinValue = self.color.green
+        self.bluePinValue = self.color.blue
+        if self.redPin == 0 and self.greenPin == 0 and self.bluePin == 0:
+            self.isOn = False
+            self.close()
+        else:
+            redPwm = self.redPinValue / float(255)
+            greenPwm = self.greenPinValue / float(255)
+            bluePwm = self.bluePinValue / float(255)
+            self.__pwmR.ChangeDutyCycle(redPwm * intensity)
+            self.__pwmG.ChangeDutyCycle(greenPwm * intensity)
+            self.__pwmB.ChangeDutyCycle(bluePwm * intensity)
+            self.isOn = True
+            print("LedStrip color updated...")
 
     def setIntensity(self, intensity):
         redPwm = self.redPinValue / float(255)
@@ -88,24 +97,23 @@ class LedStrip(object):
     
     def fadeOut(self):
         count = 0
-        intensity = self.__intensity
-        stepSize = self.__intensity / self.__steps
+        color = self.color
         while count < self.__steps:
             count += 1
-            intensity = intensity - stepSize
-            self.setIntensity(intensity)
+            intensity = (100 / self.__steps) * count
+            color.darken(intensity)
             time.sleep(self.__steps / self.__duration / float(1000))
+        self.isOn = False
 
     def fadeIn(self):
         count = 0
-        intensity = 0
-        self.setIntensity(100)
-        stepSize = self.__intensity / self.__steps
+        color = self.color
         while count < self.__steps:
             count += 1
-            intensity = intensity + stepSize
-            self.setIntensity(intensity)
+            intensity = (100 / self.__steps) * count
+            color.lighten(intensity)
             time.sleep(self.__steps / self.__duration / float(1000))
+        self.isOn = True
 
     def __getname(self):
         return self.__name
@@ -172,6 +180,18 @@ class LedStrip(object):
     
     def __setSteps(self, value):
         self.__steps = value
+    
+    def __getIsOn(self):
+        return self.__isOn
+    
+    def __setIsOn(self, value):
+        self.__isOn = value
+
+    def __getColor(self):
+        self.__color.red = self.redPinValue
+        self.__color.green = self.greenPinValue
+        self.__color.blue = self.bluePinValue
+        return self.__color
 
     name = property(__getname, __setname)
 
@@ -192,3 +212,7 @@ class LedStrip(object):
     intensity = property(__getIntensity, __setIntensity)
 
     steps = property(__getSteps, __setSteps)
+
+    isOn = property(__getIsOn, __setIsOn)
+
+    color = property(__getColor)

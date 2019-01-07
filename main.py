@@ -41,6 +41,8 @@ class MainProg(object):
             self.setIntensity()
         elif command.lower() == "lightsensor":
             self.getLightSensorValue()
+        elif command.lower() == "motionsensor":
+            self.startMotionSensor()
         elif command.lower() == "quit":
             self.close()
         elif command.lower() == "back":
@@ -90,6 +92,22 @@ class MainProg(object):
     def getLightSensorValue(self):
         intensity = self.conf.lightSensor.getLightIntensity()
         print("The sensor is: " + str(intensity))
+        self.getLedStripCommand(self.strip)
+
+    def startMotionSensor(self):
+        try:
+            while True:
+                detected = self.conf.motionSensor.detectMovement()
+                if detected:
+                    self.conf.ledStrips[self.strip].setColor("green")
+                    time.sleep(10)
+                    self.conf.ledStrips[self.strip].fadeIn()
+                else:
+                    if self.conf.ledStrips[self.strip].isOn:
+                        self.conf.ledStrips[self.strip].fadeOut()                    
+        except Exception as e:
+            print(e)
+            self.close()
 
     def setIntensity(self):
         intensity = raw_input("[LedStrip"+ str(self.strip) +"] Please select intensity[0-100]: ")
