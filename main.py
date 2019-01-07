@@ -105,6 +105,7 @@ class MainProg(object):
                 else:
                     if self.conf.ledStrips[self.strip].isOn:
                         self.conf.ledStrips[self.strip].fadeOut()                    
+                        self.conf.ledStrips[self.strip].off()
         except Exception as e:
             print(e)
             self.close()
