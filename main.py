@@ -100,8 +100,8 @@ class MainProg(object):
                 detected = self.conf.motionSensor.detectMovement()
                 if detected:
                     self.conf.ledStrips[self.strip].setColor("#ff0000")
-                    time.sleep(10)
                     self.conf.ledStrips[self.strip].fadeIn()
+                    time.sleep(10)
                 else:
                     if self.conf.ledStrips[self.strip].isOn:
                         self.conf.ledStrips[self.strip].fadeOut()                    
