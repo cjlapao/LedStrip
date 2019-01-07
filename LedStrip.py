@@ -98,7 +98,7 @@ class LedStrip(object):
     def fadeOut(self):
         if self.isOn:
             count = 0
-            color = color()
+            color = Color()
             color.fromHex(self.color.toHex())
             intensity = (100 / self.__steps)
             while count < self.__steps:
