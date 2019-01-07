@@ -71,6 +71,10 @@ class Color(object):
     
     def darken(self, percentage = 10):
         print("previous color "+self.toHex())
+        test = (percentage / 100)
+        testa = self.red * test
+        testb = self.red - testa
+        print("test" + str(test) +"testa" + str(testa) +"testb" + str(testb))
         self.red = self.red - (self.red * (percentage / 100))
         self.green = self.green - (self.green * (percentage / 100))
         self.blue = self.blue - (self.blue * (percentage / 100))
