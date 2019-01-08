@@ -1,9 +1,9 @@
 class Color(object):
     def __init__(self, *args, **kwargs):
-        self.__red = 0
-        self.__green = 0
-        self.__blue = 0
-        self.__name = ""
+        self.red = 0
+        self.green = 0
+        self.blue = 0
+        self.name = "none"
 
     def fromHex(self, value):
         if "#" in value:
@@ -13,6 +13,7 @@ class Color(object):
         self.blue = int(value[4:], 16)
 
     def toHex(self):
+        print("red" + str(self.red) +", green" + str(self.green) +", blue" + str(self.blue))
         sRed = hex(self.red)[2:]
         sGreen = hex(self.green)[2:]
         sBlue = hex(self.blue)[2:]
@@ -38,7 +39,7 @@ class Color(object):
             value = 255
         if value < 0:
             value = 0
-        self.__red = value
+        self.__red = int(round(value,0))
     
     def __get_green(self):
         return self.__green
@@ -48,7 +49,7 @@ class Color(object):
             value = 255
         if value < 0:
             value = 0
-        self.__green = value
+        self.__green = int(round(value,0))
     
     def __get_blue(self):
         return self.__blue
@@ -58,7 +59,7 @@ class Color(object):
             value = 255
         if value < 0:
             value = 0
-        self.__blue = value
+        self.__blue = int(round(value,0))
     
     def __getweb(self):
         return self.toHex()
@@ -71,13 +72,10 @@ class Color(object):
     
     def darken(self, percentage = 10):
         print("previous color "+self.toHex())
-        test = (percentage / 100)
-        testa = self.red * test
-        testb = self.red - testa
-        print("test" + str(test) +"testa" + str(testa) +"testb" + str(testb))
-        self.red = self.red - (self.red * (percentage / 100))
-        self.green = self.green - (self.green * (percentage / 100))
-        self.blue = self.blue - (self.blue * (percentage / 100))
+        self.red = self.red - (self.red * (percentage / float(100)))
+        self.green = self.green - (self.green * (percentage / float(100)))
+        self.blue = self.blue - (self.blue * (percentage / float(100)))
+        print("percentage" + str(percentage) +" red" + str(self.red) +", green" + str(self.green) +", blue" + str(self.blue))
         print("new color "+self.toHex())
         return self.toHex()
 

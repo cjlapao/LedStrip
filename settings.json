@@ -2,7 +2,8 @@
     "default" : {
         "defaultMhz": 100,
         "defaultSteps": 50,
-        "defaultDuration": 2
+        "defaultDuration": 2,
+        "defaultLightTimeout": 10000
     },
     "ledStrips" : [
         {
@@ -27,7 +28,9 @@
     },
     "motionSensor":{
         "pin": 17,
-        "readingDelay": 500,
-        "movementThreshold": 5
+        "ledPin": 27,
+        "useLedPin": true,
+        "readingDelay": 250,
+        "movementThreshold": 2
     }
 }

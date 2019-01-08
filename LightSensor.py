@@ -26,14 +26,14 @@ class LightSensor(object):
 
     def isDay(self):
         intensity = self.getLightIntensity()
-        if intensity >= 0 and intensity <= 600:
+        if intensity <= 600:
             return True
         else: 
             return False
     
     def isNight(self):
         intensity = self.getLightIntensity()
-        if intensity >= 601 and intensity <= 2000:
+        if intensity >= 601:
             return True
         else: 
             return False

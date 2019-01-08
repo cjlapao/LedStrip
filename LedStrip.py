@@ -58,7 +58,8 @@ class LedStrip(object):
         print("GPIO PWM stopped...")
     
     def off(self):
-        self.setColor("#000000")      
+        self.setColor("#000000")     
+        self.isOn = False
 
     def __restartPWM(self):
         self.__stopPWM()
@@ -98,30 +99,21 @@ class LedStrip(object):
     def fadeOut(self):
         if self.isOn:
             count = 0
-            color = Color()
-            color.fromHex(self.color.toHex())
-            newColor = ""
             intensity = (100 / self.__steps)
             while count < self.__steps:
                 count += 1                            
-                newColor = color.darken(intensity * count)
-                self.setColor(newColor)
+                self.setColor(self.color.darken(intensity))
                 time.sleep(self.__steps / self.__duration / float(1000))
-                print("fading to " + str(intensity * count) + ", color now "+ newColor)
-                time.sleep(1)
             self.isOn = False
 
     def fadeIn(self):
         if not self.isOn:
             count = 0
-            color = self.color
             intensity = (100 / self.__steps)
             while count < self.__steps:
-                count += 1            
-                color.darken(100 - (intensity * count))
-                self.setColor(color.toHex())
+                count += 1                            
+                self.setColor(self.color.darken(intensity))
                 time.sleep(self.__steps / self.__duration / float(1000))
-                print("fading from " + str(intensity * count) + ", color now "+ self.color.toHex())
             self.isOn = True
 
     def __getname(self):

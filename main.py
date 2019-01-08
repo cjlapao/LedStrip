@@ -1,19 +1,25 @@
 import RPi.GPIO as GPIO
-import time
+import time, argparse
 from LedStrip import LedStrip
 from LightSensor import LightSensor
 from Configuration import Configuration
 from Color import Color
 
 class MainProg(object):
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         self.strip = 0
         self.conf = Configuration()
+        self.timeTo = 10000
         print("Configuration loaded")
-        self.mainMenu()
+        print("a:"+str(args))
+        print("b:"+str(kwargs))
+        if "motion" in args:
+            self.startMotionSensor()
+        else:
+            self.mainMenu()
 
     def mainMenu(self):
-        stripSelector = raw_input("Select Strip[0]: ")
+        stripSelector = input("Select Strip[0]: ")
         if not stripSelector:
             stripSelector = "0"
         
@@ -30,7 +36,7 @@ class MainProg(object):
 
     def getLedStripCommand(self, ledStrip):
         strip = int(ledStrip)
-        command = raw_input("[LedStrip"+ str(strip) +"] Select Command: ")
+        command = input("[LedStrip"+ str(strip) +"] Select Command: ")
         if command.lower() == "color":
             self.setColor()
         elif command.lower() == "fadein":
@@ -54,7 +60,7 @@ class MainProg(object):
     def setColor(self):
         colorVal = ""
         while True:
-            colorVal = raw_input("[LedStrip"+ str(self.strip) +"] What color would you like: ")
+            colorVal = input("[LedStrip"+ str(self.strip) +"] What color would you like: ")
             if colorVal == "quit":
                 break
             elif colorVal == "back":
@@ -95,23 +101,39 @@ class MainProg(object):
         self.getLedStripCommand(self.strip)
 
     def startMotionSensor(self):
+        count = 0
         try:
             while True:
-                detected = self.conf.motionSensor.detectMovement()
+                detected = self.conf.motionSensor.detectMotion()
+                print("timeTo: " + str(self.timeTo)+", lightsensor at:" + str(self.conf.lightSensor.getLightIntensity()))
                 if detected:
-                    self.conf.ledStrips[self.strip].setColor("#ff0000")
-                    self.conf.ledStrips[self.strip].fadeIn()
-                    time.sleep(10)
-                else:
+                    print("lightsensor at:" + str(self.conf.lightSensor.isNight()))
+                    if self.conf.lightSensor.isNight():                    
+                        print("strip is " +str(self.conf.ledStrips[self.strip].isOn))
+                        if not self.conf.ledStrips[self.strip].isOn:
+                            self.conf.ledStrips[self.strip].setColor("#ff0000")
+                        self.timeTo += 1000                                     
+                        if self.timeTo > 10000:
+                            self.timeTo = 10000
+                else:                    
                     if self.conf.ledStrips[self.strip].isOn:
-                        self.conf.ledStrips[self.strip].fadeOut()                    
-                        self.conf.ledStrips[self.strip].off()
+                        if self.conf.lightSensor.isDay():
+                            print("putting it off")
+                            self.timeTo = 10000                            
+                            self.conf.ledStrips[self.strip].off()
+                        else:
+                            self.timeTo -= 100
+                            if self.timeTo <= 0:
+                                print("putting it off")
+                                self.timeTo = 10000                            
+                                self.conf.ledStrips[self.strip].off()
+                time.sleep(0.1)
         except Exception as e:
             print(e)
             self.close()
 
     def setIntensity(self):
-        intensity = raw_input("[LedStrip"+ str(self.strip) +"] Please select intensity[0-100]: ")
+        intensity = input("[LedStrip"+ str(self.strip) +"] Please select intensity[0-100]: ")
         if not intensity:
             self.getLedStripCommand(self.strip)
         else:
@@ -133,4 +155,10 @@ class MainProg(object):
             "quit: will exist the current menu")
 
 if __name__ == "__main__":
-    MainProg()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--cmd", help = "command")
+    args = parser.parse_args()
+    cmd  = ""
+    if args.cmd:
+        cmd = args.cmd
+    MainProg(args.cmd)
