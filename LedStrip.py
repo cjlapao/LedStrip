@@ -1,4 +1,5 @@
 import RPi.GPIO as GPIO
+import pigpio as piio
 import time
 from Color import Color
 
@@ -7,7 +8,7 @@ class LedStrip(object):
     def __init__(self, red, green, blue):
         self.isOn = False
         self.__color = Color()
-        self.__defaultMhz = 100
+        self.__defaultMhz = 50
         self.__redPin = red
         self.__greenPin = green
         self.__bluePin = blue
@@ -24,7 +25,7 @@ class LedStrip(object):
 
         self.__steps = 50
         self.__duration = 2
-
+        self.__pi = piio.pi()
         self.setupGPIO()
     
     def setupGPIO(self):
@@ -65,7 +66,7 @@ class LedStrip(object):
         self.__stopPWM()
         self.__startPWM()
 
-    def setColor(self, name, intensity = 100):
+    def setColorTemp(self, name, intensity = 100):
         self.__restartPWM()
         self.color.fromHex(name)
         self.redPinValue = self.color.red
@@ -78,9 +79,29 @@ class LedStrip(object):
             redPwm = self.redPinValue / float(255)
             greenPwm = self.greenPinValue / float(255)
             bluePwm = self.bluePinValue / float(255)
-            self.__pwmR.ChangeDutyCycle(redPwm * intensity)
-            self.__pwmG.ChangeDutyCycle(greenPwm * intensity)
-            self.__pwmB.ChangeDutyCycle(bluePwm * intensity)
+            self.__pwmR.ChangeDutyCycle(redPwm * 100)
+            self.__pwmG.ChangeDutyCycle(greenPwm * 100)
+            self.__pwmB.ChangeDutyCycle(bluePwm * 100)
+            self.isOn = True
+            print("LedStrip color updated...")
+
+    def setColor(self, name, intensity = 100):
+        #self.__restartPWM()
+        self.color.fromHex(name)
+        self.redPinValue = self.color.red
+        self.greenPinValue = self.color.green
+        self.bluePinValue = self.color.blue
+        if self.color.red == 0 and self.color.green == 0 and self.color.blue == 0:
+            self.isOn = False
+            self.close()
+        else:
+            redPwm = self.redPinValue / float(255) * 255
+            greenPwm = self.greenPinValue / float(255) * 255
+            bluePwm = self.bluePinValue / float(255) * 255
+            print("redPwm:" + str(redPwm) + " greenPwm:" + str(greenPwm) +  " bluePwm:" + str(bluePwm))
+            self.__pi.set_PWM_dutycycle(self.redPin, redPwm)
+            self.__pi.set_PWM_dutycycle(self.greenPin, greenPwm)
+            self.__pi.set_PWM_dutycycle(self.bluePin, bluePwm)
             self.isOn = True
             print("LedStrip color updated...")
 

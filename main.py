@@ -5,18 +5,27 @@ from LightSensor import LightSensor
 from Configuration import Configuration
 from Color import Color
 
-class MainProg(object):
+class LedStripController(object):
     def __init__(self, *args, **kwargs):
         self.strip = 0
         self.conf = Configuration()
+        self.conf.lightSensor
         self.timeTo = 10000
         print("Configuration loaded")
-        print("a:"+str(args))
-        print("b:"+str(kwargs))
-        if "motion" in args:
-            self.startMotionSensor()
-        else:
-            self.mainMenu()
+        self.cmd = None
+        self.color = None
+        for arg in args:
+            if arg.cmd:
+                if arg.cmd == "motion":
+                    self.startMotionSensor()
+                elif arg.cmd == "light":
+                    self.getLightSensorValue()
+                elif arg.cmd == "color":
+                    self.setColor()
+                else:
+                    self.mainMenu()
+            else:
+                self.mainMenu()
 
     def mainMenu(self):
         stripSelector = input("Select Strip[0]: ")
@@ -156,9 +165,7 @@ class MainProg(object):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--cmd", help = "command")
+    parser.add_argument("--cmd", help = "command to execute")
+    parser.add_argument("--color", help = "color to display")
     args = parser.parse_args()
-    cmd  = ""
-    if args.cmd:
-        cmd = args.cmd
-    MainProg(args.cmd)
+    LedStripController(args)

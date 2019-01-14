@@ -75,7 +75,7 @@ class Configuration(object):
 
     def  __getMotionSensor(self):
         return self.__motionSensor
-
+   
     def printLedStrips(self):
         for ledStrip in self.__ledStrips:
             print("name: " + ledStrip.name)
@@ -86,7 +86,7 @@ class Configuration(object):
 
     ledStrips = property(_get_LedStrips, _set_ledStrips)
 
-    lightSensor = property(_get_lightSensor, _set_lightSensor)
+    lightSensor = property(_get_lightSensor, _set_lightSensor, type(LightSensor))
 
     colors = property(__get_colors, __set_colors)
 
