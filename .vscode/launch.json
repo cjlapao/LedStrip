@@ -10,7 +10,7 @@
             "request": "launch",
             "program": "${file}",
             "console": "integratedTerminal",
-            "args": ["--cmd", "motion"]
+            //"args": ["--cmd", "motion"]
         },
         {
             "name": "Python: Attach",

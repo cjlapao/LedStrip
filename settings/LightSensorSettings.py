@@ -1,5 +1,5 @@
 class LightSensorSettings(object):
-    def __init__(self, *args, **kwargs):
+    def __init__(self):
         self.__pin = -1
         self.__dayNightThreshold = 600
     
@@ -18,3 +18,7 @@ class LightSensorSettings(object):
         if(not type(value) == int):
             value = 600
         self.__dayNightThreshold = value
+    
+    pin = property(__getPin, __setPin)
+
+    dayNightThreshold = property(__getDayNightThreshold, __setDayNightThreshold)

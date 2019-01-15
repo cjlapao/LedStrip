@@ -146,11 +146,17 @@ class LedStripController(object):
         if not intensity:
             self.getLedStripCommand(self.strip)
         else:
-            if int(intensity) >-1 and int(intensity) < 101:
-                self.conf.ledStrips[self.strip].setIntensity(intensity)
+            if intensity == "quit":
+                self.close()
+            elif intensity == "back":
+                self.getLedStripCommand(self.strip)
             else:
-                print("invalid number for intensity")
-        self.getLedStripCommand(self.strip)
+                if int(intensity) >-1 and int(intensity) < 101:
+                    print("Setting intensity to " + str(intensity))
+                    self.conf.ledStrips[self.strip].setIntensity(intensity)
+                else:
+                    print("invalid number for intensity")
+        self.setIntensity()
 
     def close(self):
         print("[LedStrip"+ str(self.strip) +"] Closing")

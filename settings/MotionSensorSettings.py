@@ -1,11 +1,11 @@
 from settings.LedStripSettings import LedStripSettings
-from LightSensor import LightSenso
+from settings.LightSensorSettings import LightSensorSettings
 
 class MotionSensorSettings(object):
-    def __init__(self, *args, **kwargs):
+    def __init__(self):
         self.__pin = -1
-        self.__ledStrips = [LedStrip()]
-        self.__lightSensors = [LightSensor]
+        self.__ledStrips = [LedStripSettings]
+        self.__lightSensors = [LightSensorSettings]
 
     def __getPin(self):
         return self.__pin
@@ -23,6 +23,6 @@ class MotionSensorSettings(object):
 
     ledStrips = property(__getLedStrips)
 
-    __lightSensors
+    lightSensors = property(__getLightSensors) 
         
     

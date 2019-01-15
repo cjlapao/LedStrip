@@ -2,21 +2,26 @@ import RPi.GPIO as GPIO
 import pigpio as piio
 import time
 from Color import Color
+from settings.LedStripSettings import LedStripSettings
 
 class LedStrip(object):
     
-    def __init__(self, red, green, blue):
+    def __init__(self, settings):
         self.isOn = False
+        self.__settings = LedStripSettings
+        self.__settings = settings
         self.__color = Color()
-        self.__defaultMhz = 50
-        self.__redPin = red
-        self.__greenPin = green
-        self.__bluePin = blue
+
+        self.__color = self.__settings.currentColor
+        self.__redPin = self.__settings.redPin
+        self.__greenPin = self.__settings.greenPin
+        self.__bluePin = self.__settings.bluePin
+        self.__intensity = 100
+
 
         self.__redPinValue = 0
         self.__greenPinValue = 0
         self.__bluePinValue = 0
-        self.__intensity = 100
         self.__name = "none"
 
         self.__pwmR = None
@@ -25,68 +30,38 @@ class LedStrip(object):
 
         self.__steps = 50
         self.__duration = 2
-        self.__pi = piio.pi()
         self.setupGPIO()
     
     def setupGPIO(self):
         print("Setting up Rpi GPIO")
-        GPIO.setmode(GPIO.BCM)
-        GPIO.setwarnings(False)
-        
-        GPIO.setup(self.redPin, GPIO.OUT)
-        GPIO.setup(self.greenPin, GPIO.OUT)
-        GPIO.setup(self.bluePin, GPIO.OUT)        
-        
-        self.__pwmR = GPIO.PWM(self.redPin, self.__defaultMhz)
-        self.__pwmG = GPIO.PWM(self.greenPin, self.__defaultMhz)
-        self.__pwmB = GPIO.PWM(self.bluePin, self.__defaultMhz)
-
-        self.__startPWM()
-        
+        self.__pi = piio.pi()
+        self.__startPWM()        
         print("GPIO setup finished...")
 
     def __startPWM(self):
-        self.__pwmR.start(0)
-        self.__pwmG.start(0)
-        self.__pwmB.start(0)
+        self.__pwmR = GPIO.PWM(self.redPin, self.__defaultMhz)
+        self.__pwmG = GPIO.PWM(self.greenPin, self.__defaultMhz)
+        self.__pwmB = GPIO.PWM(self.bluePin, self.__defaultMhz)
         print("GPIO PWM started")
     
     def __stopPWM(self):
         #GPIO.cleanup()
-        self.__pwmR.stop()
-        self.__pwmG.stop()
-        self.__pwmB.stop()
+        self.__pi.set_PWM_dutycycle(self.redPin, 0)
+        self.__pi.set_PWM_dutycycle(self.greenPin, 0)
+        self.__pi.set_PWM_dutycycle(self.bluePin, 0)
+        self.__pi.stop()
+        self.isOn = False
         print("GPIO PWM stopped...")
     
     def off(self):
-        self.setColor("#000000")     
+        self.setColor("#010101")     
         self.isOn = False
 
     def __restartPWM(self):
         self.__stopPWM()
         self.__startPWM()
 
-    def setColorTemp(self, name, intensity = 100):
-        self.__restartPWM()
-        self.color.fromHex(name)
-        self.redPinValue = self.color.red
-        self.greenPinValue = self.color.green
-        self.bluePinValue = self.color.blue
-        if self.color.red == 0 and self.color.green == 0 and self.color.blue == 0:
-            self.isOn = False
-            self.close()
-        else:
-            redPwm = self.redPinValue / float(255)
-            greenPwm = self.greenPinValue / float(255)
-            bluePwm = self.bluePinValue / float(255)
-            self.__pwmR.ChangeDutyCycle(redPwm * 100)
-            self.__pwmG.ChangeDutyCycle(greenPwm * 100)
-            self.__pwmB.ChangeDutyCycle(bluePwm * 100)
-            self.isOn = True
-            print("LedStrip color updated...")
-
     def setColor(self, name, intensity = 100):
-        #self.__restartPWM()
         self.color.fromHex(name)
         self.redPinValue = self.color.red
         self.greenPinValue = self.color.green
@@ -98,21 +73,32 @@ class LedStrip(object):
             redPwm = self.redPinValue / float(255) * 255
             greenPwm = self.greenPinValue / float(255) * 255
             bluePwm = self.bluePinValue / float(255) * 255
-            print("redPwm:" + str(redPwm) + " greenPwm:" + str(greenPwm) +  " bluePwm:" + str(bluePwm))
+            #print("redPwm:" + str(redPwm) + " greenPwm:" + str(greenPwm) +  " bluePwm:" + str(bluePwm))
             self.__pi.set_PWM_dutycycle(self.redPin, redPwm)
             self.__pi.set_PWM_dutycycle(self.greenPin, greenPwm)
             self.__pi.set_PWM_dutycycle(self.bluePin, bluePwm)
+            self.__intensity = 100
             self.isOn = True
-            print("LedStrip color updated...")
+            #print("LedStrip color updated...")
 
     def setIntensity(self, intensity):
-        redPwm = self.redPinValue / float(255)
-        greenPwm = self.greenPinValue / float(255)
-        bluePwm = self.bluePinValue / float(255)
-        self.__pwmR.ChangeDutyCycle(redPwm * intensity)
-        self.__pwmG.ChangeDutyCycle(greenPwm * intensity)
-        self.__pwmB.ChangeDutyCycle(bluePwm * intensity)
+        try:
+            intensity = int(intensity)
+        except:
+            intensity = 100 
+            pass
+        self.__intensity = intensity
+        color = Color()
+        color.fromHex(self.__color.toHex())
+        color.darken(100 - intensity)
+        if color.red == 0 and color.green == 0 and color.blue == 0:
+            self.isOn = False
+            self.close()
+        self.__pi.set_PWM_dutycycle(self.redPin, color.red)
+        self.__pi.set_PWM_dutycycle(self.greenPin, color.green)
+        self.__pi.set_PWM_dutycycle(self.bluePin, color.blue)
         print("LedStrip color intensity updated...")
+        self.isOn = True
 
     def close(self):
         self.__stopPWM()
@@ -121,20 +107,36 @@ class LedStrip(object):
         if self.isOn:
             count = 0
             intensity = (100 / self.__steps)
+            duration = int(self.__duration * 1000)
+            newIntensity =  0
+            oldColor = Color()
+            oldColor.fromHex(self.__color.toHex())
             while count < self.__steps:
-                count += 1                            
-                self.setColor(self.color.darken(intensity))
-                time.sleep(self.__steps / self.__duration / float(1000))
+                count += 1
+                newIntensity += intensity
+                newColor = oldColor.getDarkerVersion(newIntensity)
+                self.setColor(newColor)
+                time.sleep((1 * duration / self.__steps) / 1000)
+            self.setColor("#010101")
+            self.__color.fromHex(oldColor.toHex())
             self.isOn = False
 
     def fadeIn(self):
         if not self.isOn:
             count = 0
             intensity = (100 / self.__steps)
+            duration = int(self.__duration * 1000)
+            newIntensity =  100
+            oldColor = Color()
+            oldColor.fromHex(self.__color.toHex())
             while count < self.__steps:
-                count += 1                            
-                self.setColor(self.color.darken(intensity))
-                time.sleep(self.__steps / self.__duration / float(1000))
+                count += 1
+                newIntensity -= intensity
+                newColor = oldColor.getDarkerVersion(newIntensity)
+                self.setColor(newColor)
+                time.sleep((1 * duration / self.__steps) / 1000)
+            self.__color.fromHex(oldColor.toHex())
+            self.setColor(self.__color.toHex())
             self.isOn = True
 
     def __getname(self):
@@ -148,24 +150,18 @@ class LedStrip(object):
     
     def __setredPin(self, value):
         self.__redPin = value
-        GPIO.setup(value, GPIO.OUT)
-        GPIO.output(value, GPIO.LOW)
     
     def _get_greenPin(self):
         return self.__greenPin
     
     def _set_greenPin(self, value):
         self.__greenPin = value
-        GPIO.setup(value, GPIO.OUT)
-        GPIO.output(value, GPIO.LOW)
     
     def _get_bluePin(self):
         return self.__bluePin
     
     def _set_bluePin(self, value):
         self.__bluePin = value
-        GPIO.setup(value, GPIO.OUT)
-        GPIO.output(value, GPIO.LOW)
 
     def __getredPinValue(self):
         return self.__redPinValue
@@ -189,7 +185,7 @@ class LedStrip(object):
         return self.__intensity
 
     def __setIntensity(self, value):
-        self.__intensity = value
+        self.setIntensity(value)
     
     def __getDuration(self):
         return self.__duration
