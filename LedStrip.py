@@ -12,7 +12,7 @@ class LedStrip(object):
         self.__settings = settings
         self.__color = Color()
 
-        self.__color = self.__settings.currentColor
+        self.__color.fromHex(self.__settings.currentColor)
         self.__redPin = self.__settings.redPin
         self.__greenPin = self.__settings.greenPin
         self.__bluePin = self.__settings.bluePin
@@ -43,10 +43,11 @@ class LedStrip(object):
     
     def __stopPWM(self):
         #GPIO.cleanup()
-        self.__pi.set_PWM_dutycycle(self.redPin, 0)
-        self.__pi.set_PWM_dutycycle(self.greenPin, 0)
-        self.__pi.set_PWM_dutycycle(self.bluePin, 0)
-        self.__pi.stop()
+        if self.__pi.connected:
+            self.__pi.set_PWM_dutycycle(self.redPin, 0)
+            self.__pi.set_PWM_dutycycle(self.greenPin, 0)
+            self.__pi.set_PWM_dutycycle(self.bluePin, 0)
+            self.__pi.stop()
         self.isOn = False
         print("GPIO PWM stopped...")
     
@@ -67,16 +68,19 @@ class LedStrip(object):
             self.isOn = False
             self.close()
         else:
-            redPwm = self.redPinValue / float(255) * 255
-            greenPwm = self.greenPinValue / float(255) * 255
-            bluePwm = self.bluePinValue / float(255) * 255
-            #print("redPwm:" + str(redPwm) + " greenPwm:" + str(greenPwm) +  " bluePwm:" + str(bluePwm))
-            self.__pi.set_PWM_dutycycle(self.redPin, redPwm)
-            self.__pi.set_PWM_dutycycle(self.greenPin, greenPwm)
-            self.__pi.set_PWM_dutycycle(self.bluePin, bluePwm)
-            self.__intensity = 100
-            self.isOn = True
-            #print("LedStrip color updated...")
+            if self.__pi.connected:
+                redPwm = self.redPinValue / float(255) * 255
+                greenPwm = self.greenPinValue / float(255) * 255
+                bluePwm = self.bluePinValue / float(255) * 255
+                #print("redPwm:" + str(redPwm) + " greenPwm:" + str(greenPwm) +  " bluePwm:" + str(bluePwm))
+                self.__pi.set_PWM_dutycycle(self.redPin, redPwm)
+                self.__pi.set_PWM_dutycycle(self.greenPin, greenPwm)
+                self.__pi.set_PWM_dutycycle(self.bluePin, bluePwm)
+                self.__intensity = 100
+                self.isOn = True
+                #print("LedStrip color updated...")
+            else:
+                self.isOn = False
 
     def setIntensity(self, intensity):
         try:
@@ -91,11 +95,14 @@ class LedStrip(object):
         if color.red == 0 and color.green == 0 and color.blue == 0:
             self.isOn = False
             self.close()
-        self.__pi.set_PWM_dutycycle(self.redPin, color.red)
-        self.__pi.set_PWM_dutycycle(self.greenPin, color.green)
-        self.__pi.set_PWM_dutycycle(self.bluePin, color.blue)
-        print("LedStrip color intensity updated...")
-        self.isOn = True
+        if self.__pi.connected:
+            self.__pi.set_PWM_dutycycle(self.redPin, color.red)
+            self.__pi.set_PWM_dutycycle(self.greenPin, color.green)
+            self.__pi.set_PWM_dutycycle(self.bluePin, color.blue)
+            print("LedStrip color intensity updated...")
+            self.isOn = True
+        else:
+            self.isOn = False
 
     def close(self):
         self.__stopPWM()

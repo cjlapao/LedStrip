@@ -18,7 +18,7 @@ class Configuration(object):
         self.__lightSensor = LightSensor
         self.__motionSensor = MotionSensor
 
-        self.__ledStripsSettings = [LedStripSettings]
+        self.__ledStripsSettings = []
         self.__motionSensorSettings = [MotionSensorSettings]
         self.__lightSensorSettings = [LightSensorSettings]
 
@@ -48,9 +48,6 @@ class Configuration(object):
                             ledSetting.name = ledStrip["name"]
                             ledSetting.id = self.getValue(ledStrip,"id") 
                             led = LedStrip(ledSetting)
-                            led.name = str(ledStrip["name"])
-                            led.setColor(ledStrip["currentColor"])
-                            led.intensity = (ledStrip["currentIntensity"])
                             self.__ledStripsSettings.append(ledSetting)
                             self.__ledStrips.append(led)
                     print("Ledstrip settings loaded...")
@@ -109,7 +106,12 @@ class Configuration(object):
     ledStripsCount = property(__getLedstripCount)
 
     items = property(_get_items, _set_items)
-
+ __se                            led.name = str(ledStrip["name"])
+                            led.setColor(ledStrip["currentColor"])
+                            led.intensity = (ledStrip["currentIntensity"])
+                            led.name = str(ledStrip["name"])
+                            led.setColor(ledStrip["currentColor"])
+                            led.intensity = (ledStrip["currentIntensity"]
     ledStrips = property(_get_LedStrips, _set_ledStrips)
 
     lightSensor = property(_get_lightSensor, _set_lightSensor, type(LightSensor))

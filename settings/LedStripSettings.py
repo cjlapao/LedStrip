@@ -7,7 +7,10 @@ class LedStripSettings(object):
         self.__redPin = -1
         self.__greenPin = -1
         self.__bluePin  = -1
-        self.__currentColor = None
+        self.redPin = redPin
+        self.bluePin = bluePin
+        self.greenPin = greenPin
+        self.__currentColor = "#000000"
         self.__currentIntensity = 100
     
     def __getredPin(self):
