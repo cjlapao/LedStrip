@@ -39,9 +39,6 @@ class LedStrip(object):
         print("GPIO setup finished...")
 
     def __startPWM(self):
-        self.__pwmR = GPIO.PWM(self.redPin, self.__defaultMhz)
-        self.__pwmG = GPIO.PWM(self.greenPin, self.__defaultMhz)
-        self.__pwmB = GPIO.PWM(self.bluePin, self.__defaultMhz)
         print("GPIO PWM started")
     
     def __stopPWM(self):

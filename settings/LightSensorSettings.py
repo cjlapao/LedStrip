@@ -1,6 +1,6 @@
 class LightSensorSettings(object):
-    def __init__(self):
-        self.__pin = -1
+    def __init__(self, pin):
+        self.pin = pin
         self.__dayNightThreshold = 600
     
     def __getPin(self):

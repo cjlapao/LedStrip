@@ -2,8 +2,8 @@ from settings.LedStripSettings import LedStripSettings
 from settings.LightSensorSettings import LightSensorSettings
 
 class MotionSensorSettings(object):
-    def __init__(self):
-        self.__pin = -1
+    def __init__(self, pin):
+        self.pin = pin
         self.__ledStrips = [LedStripSettings]
         self.__lightSensors = [LightSensorSettings]
 

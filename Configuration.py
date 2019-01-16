@@ -1,10 +1,14 @@
 import json
 import io
 import os
+import uuid
 from LedStrip import LedStrip
 from LightSensor import LightSensor
 from MotionSensor import MotionSensor
 from Colors import Colors
+from settings.LedStripSettings import LedStripSettings
+from settings.MotionSensorSettings import MotionSensorSettings
+from settings.LightSensorSettings import LightSensorSettings
 
 class Configuration(object):
 
@@ -13,8 +17,21 @@ class Configuration(object):
         self.__ledStrips = []
         self.__lightSensor = LightSensor
         self.__motionSensor = MotionSensor
+
+        self.__ledStripsSettings = [LedStripSettings]
+        self.__motionSensorSettings = [MotionSensorSettings]
+        self.__lightSensorSettings = [LightSensorSettings]
+
         self.__colors = Colors()
         self.loadSettings()
+
+    def getValue(self, key, value):
+        try:
+            keyLen = len(key[value])
+            if keyLen >  0:
+                return key[value]
+        except:
+            pass
 
     def loadSettings(self):
         exist = os.path.isfile("settings.json")
@@ -25,10 +42,16 @@ class Configuration(object):
                     ledStripsLen = len(self.__items["ledStrips"])
                     if (ledStripsLen > 0):
                         for ledStrip in self.__items["ledStrips"]:
-                            led = LedStrip(ledStrip["redPin"],ledStrip["greenPin"],ledStrip["bluePin"])
+                            ledSetting = LedStripSettings(ledStrip["redPin"],ledStrip["greenPin"],ledStrip["bluePin"])
+                            ledSetting.currentColor = ledStrip["currentColor"]
+                            ledSetting.currentIntensity = ledStrip["currentIntensity"]
+                            ledSetting.name = ledStrip["name"]
+                            ledSetting.id = self.getValue(ledStrip,"id") 
+                            led = LedStrip(ledSetting)
                             led.name = str(ledStrip["name"])
                             led.setColor(ledStrip["currentColor"])
-                            led.intensity = (ledStrip["currentIntensity"])                                    
+                            led.intensity = (ledStrip["currentIntensity"])
+                            self.__ledStripsSettings.append(ledSetting)
                             self.__ledStrips.append(led)
                     print("Ledstrip settings loaded...")
                 if "lightSensor" in self.__items:
@@ -79,6 +102,9 @@ class Configuration(object):
     def printLedStrips(self):
         for ledStrip in self.__ledStrips:
             print("name: " + ledStrip.name)
+
+    def __getledStripsSettings(self):
+        return self.__ledStripsSettings
     
     ledStripsCount = property(__getLedstripCount)
 
@@ -91,3 +117,11 @@ class Configuration(object):
     colors = property(__get_colors, __set_colors)
 
     motionSensor = property(__getMotionSensor)
+
+    ledStripSettings = property(__getledStripsSettings)
+
+if __name__ == "__main__":
+    conf = Configuration()
+    conf.loadSettings()
+    led1c= conf.ledStripSettings
+    print("ledc: " + led1c[0].id)

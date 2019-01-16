@@ -1,5 +1,7 @@
+import uuid
+
 class LedStripSettings(object):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, redPin, greenPin, bluePin):
         self.__id = 0
         self.__name = "LedStrip"
         self.__redPin = -1
@@ -82,6 +84,8 @@ class LedStripSettings(object):
         return self.__id
     
     def __setid(self, value):
+        if not value:
+            value = uuid.uuid1()
         self.__id = value
 
     def __getname(self):
